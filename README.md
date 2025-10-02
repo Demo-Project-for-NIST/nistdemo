@@ -1,18 +1,21 @@
 # NIST AI Risk Management Toolkit
 
-[![Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](https://nist-ai-risk-toolkit.onrender.com)
-[![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://nist-ai-risk-toolkit.onrender.com/docs)
-[![Status](https://img.shields.io/badge/Status-Prototype-yellow)]()
+[![Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](https://nistdemo.onrender.com/demo)
+[![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://nistdemo.onrender.com/docs)
+[![Status](https://img.shields.io/badge/Status-Production_Ready-green)]()
 
-Open-source AI risk assessment and management prototype, aligned with NIST Cybersecurity Framework 2.0 and Executive Order 14028.
+Open-source AI risk assessment and management toolkit, aligned with NIST Cybersecurity Framework 2.0 and Executive Order 14028.
 
 ## Live Demo
 
-**Try it now:** [https://nist-ai-risk-toolkit.onrender.com](https://nist-ai-risk-toolkit.onrender.com)
+**Start Here:** [https://nistdemo.onrender.com/demo](https://nistdemo.onrender.com/demo)
 
-- **Interactive Dashboard**: Visual AI risk assessment interface
-- **API Documentation**: Complete REST API with live testing
-- **Real-time Assessment**: Immediate CSF compliance gap analysis
+### Complete Access Points:
+- **Demo Landing Page**: [https://nistdemo.onrender.com/demo](https://nistdemo.onrender.com/demo) - Professional overview with status indicators
+- **Interactive Dashboard**: [https://nistdemo.onrender.com/dashboard](https://nistdemo.onrender.com/dashboard) - Visual risk assessment interface
+- **API Documentation (Swagger)**: [https://nistdemo.onrender.com/docs](https://nistdemo.onrender.com/docs) - Interactive API testing
+- **API Documentation (ReDoc)**: [https://nistdemo.onrender.com/redoc](https://nistdemo.onrender.com/redoc) - Clean documentation format
+- **API Overview**: [https://nistdemo.onrender.com/](https://nistdemo.onrender.com/) - JSON endpoint discovery
 
 ## Overview
 
@@ -64,7 +67,7 @@ Where:
 ## Quick Start
 
 ### Option 1: Try Online Demo (Immediate)
-Visit [https://nist-ai-risk-toolkit.onrender.com](https://nist-ai-risk-toolkit.onrender.com) - no installation required!
+Visit [https://nistdemo.onrender.com/demo](https://nistdemo.onrender.com/demo) - no installation required!
 
 ### Option 2: Local Development
 
@@ -278,9 +281,9 @@ MIT License - see LICENSE file for details.
 - Integration examples for common platforms
 
 ### Phase 3 (Months 7-12)
-- Federal agency pilot programs
-- Academic research collaboration
-- NIST official recognition pursuit
+- Enterprise integration modules
+- Advanced economic stress indicators
+- Enhanced compliance reporting
 
 ## Citation
 

@@ -4,7 +4,8 @@ FastAPI application for NIST AI Risk Management Toolkit.
 Provides REST API endpoints for AI risk assessment and NIST CSF compliance reporting.
 """
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import json
@@ -50,6 +51,11 @@ action_planner = ActionPlanner()
 # Create database tables on startup
 create_tables()
 
+# Mount static files for dashboard
+examples_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples")
+if os.path.exists(examples_path):
+    app.mount("/static", StaticFiles(directory=examples_path), name="static")
+
 
 @app.get("/")
 async def root():
@@ -58,12 +64,23 @@ async def root():
         "message": "NIST AI Risk Management Toolkit",
         "version": "0.1.0",
         "documentation": "/docs",
+        "dashboard": "/dashboard",
         "endpoints": {
             "assess": "POST /assess - AI system risk assessment",
             "csf-mapping": "GET /csf-mapping/{risk_type} - CSF category mapping",
             "report": "POST /report - Generate compliance report"
         }
     }
+
+
+@app.get("/dashboard")
+async def dashboard():
+    """Serve the visual dashboard."""
+    dashboard_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "visual_dashboard.html")
+    if os.path.exists(dashboard_path):
+        return FileResponse(dashboard_path, media_type="text/html")
+    else:
+        raise HTTPException(status_code=404, detail="Dashboard not found")
 
 
 @app.post("/assess", response_model=RiskAssessmentResponse)

@@ -8,11 +8,3 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
-  - type: static
-    name: nist-ai-dashboard
-    staticPublishPath: ./examples
-    buildCommand: "echo 'Static files ready'"
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /visual_dashboard.html

@@ -109,12 +109,12 @@ async def demo_landing():
     <body>
         <div class="container">
             <h1>NIST AI Risk Management Toolkit</h1>
-            <div class="status">✅ Demo is live and ready for testing</div>
+            <div class="status">Demo is live and ready for testing</div>
             
             <h2>Available Interfaces:</h2>
-            <a href="/docs" class="link">📋 API Documentation (Swagger)</a>
-            <a href="/redoc" class="link">📖 API Documentation (ReDoc)</a>
-            <a href="/dashboard" class="link">📊 Interactive Dashboard</a>
+            <a href="/docs" class="link">API Documentation (Swagger)</a>
+            <a href="/redoc" class="link">API Documentation (ReDoc)</a>
+            <a href="/dashboard" class="link">Interactive Dashboard</a>
             
             <h2>Quick API Test:</h2>
             <p>Try this sample request to assess an AI system:</p>

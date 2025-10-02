@@ -4,7 +4,7 @@ FastAPI application for NIST AI Risk Management Toolkit.
 Provides REST API endpoints for AI risk assessment and NIST CSF compliance reporting.
 """
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -77,11 +77,61 @@ async def root():
 @app.get("/demo")
 async def demo_landing():
     """Serve the demo landing page."""
-    landing_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "index.html")
-    if os.path.exists(landing_path):
-        return FileResponse(landing_path, media_type="text/html")
-    else:
-        raise HTTPException(status_code=404, detail="Demo landing page not found")
+    # Try multiple possible paths for deployment environments
+    possible_paths = [
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "index.html"),
+        os.path.join("examples", "index.html"),
+        os.path.join(os.getcwd(), "examples", "index.html"),
+        "/opt/render/project/src/examples/index.html",  # Render deployment path
+        "/app/examples/index.html"  # Common container path
+    ]
+    
+    for landing_path in possible_paths:
+        if os.path.exists(landing_path):
+            return FileResponse(landing_path, media_type="text/html")
+    
+    # If no file found, return a simple HTML demo page
+    demo_html = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NIST AI Risk Management Toolkit - Demo</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+            .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            .status { padding: 10px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; margin: 20px 0; }
+            .link { display: inline-block; margin: 10px 15px 10px 0; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+            .link:hover { background: #0056b3; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>NIST AI Risk Management Toolkit</h1>
+            <div class="status">✅ Demo is live and ready for testing</div>
+            
+            <h2>Available Interfaces:</h2>
+            <a href="/docs" class="link">📋 API Documentation (Swagger)</a>
+            <a href="/redoc" class="link">📖 API Documentation (ReDoc)</a>
+            <a href="/dashboard" class="link">📊 Interactive Dashboard</a>
+            
+            <h2>Quick API Test:</h2>
+            <p>Try this sample request to assess an AI system:</p>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 4px; overflow-x: auto;">
+POST /assess
+{
+  "system_name": "Credit Risk Model",
+  "model_type": "Random Forest", 
+  "data_sources": ["internal_db", "credit_bureau"],
+  "deployment_env": "aws_sagemaker",
+  "third_party_libs": ["scikit-learn", "pandas"]
+}</pre>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=demo_html)
 
 
 @app.get("/dashboard")

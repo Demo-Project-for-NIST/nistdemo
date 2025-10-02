@@ -4,7 +4,7 @@
 [![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://nistdemo.onrender.com/docs)
 [![Status](https://img.shields.io/badge/Status-Production_Ready-green)]()
 
-Open-source AI risk assessment and management toolkit, aligned with NIST Cybersecurity Framework 2.0 and Executive Order 14028.
+Open-source AI risk assessment and management toolkit, aligned with NIST Cybersecurity Framework 2.0.
 
 ## Live Demo
 
@@ -28,7 +28,7 @@ The NIST AI Risk Management Toolkit provides automated risk assessment for AI/ML
 - **Action Plans with References**: Generated remediation plans with direct links to NIST guidelines
 - **Real-time API**: FastAPI implementation with automatic OpenAPI documentation
 - **Scalable Architecture**: Framework expands without breaking existing assessments
-- **Federal Compliance**: Designed for Executive Order 14028 requirements
+- **Standards Compliance**: Designed for NIST framework requirements
 - **Live Demo**: Immediately accessible online demonstration
 - **Comprehensive Reporting**: JSON and future PDF compliance reports
 
@@ -267,23 +267,6 @@ MIT License - see LICENSE file for details.
 - GitHub Issues for bug reports and feature requests
 - Discussions for questions and community support
 - Documentation at `/docs` endpoint when running API server
-
-## Roadmap
-
-### Phase 1 (Current - MVP)
-- Core risk assessment and CSF mapping
-- REST API with basic reporting
-- Test suite and documentation
-
-### Phase 2 (Months 4-6)
-- PDF report generation with ReportLab
-- Enhanced economic stress indicators
-- Integration examples for common platforms
-
-### Phase 3 (Months 7-12)
-- Enterprise integration modules
-- Advanced economic stress indicators
-- Enhanced compliance reporting
 
 ## Citation
 

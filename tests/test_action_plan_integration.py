@@ -17,12 +17,12 @@ def test_action_plan_integration():
     try:
         response = requests.get(f"{base_url}/health", timeout=5)
         if response.status_code == 200:
-            print("✅ API Server: CONNECTED")
+            print("PASS API Server: CONNECTED")
         else:
-            print("❌ API Server: ERROR")
+            print("FAIL API Server: ERROR")
             return
     except:
-        print("❌ API Server: OFFLINE")
+        print("FAIL API Server: OFFLINE")
         return
 
     # Test system with multiple risk factors
@@ -38,7 +38,7 @@ def test_action_plan_integration():
         "access_controls": False
     }
     
-    print("\n🎯 TESTING HIGH-RISK AI SYSTEM")
+    print("\nTARGET TESTING HIGH-RISK AI SYSTEM")
     print(f"System: {test_system['system_name']}")
     print(f"Model: {test_system['model_type']}")
     print(f"Data Sources: {len(test_system['data_sources'])} sources")
@@ -51,7 +51,7 @@ def test_action_plan_integration():
         if response.status_code == 200:
             result = response.json()
             
-            print(f"\n📊 ASSESSMENT RESULTS:")
+            print(f"\nRESULTS ASSESSMENT RESULTS:")
             print(f"   Risk Score: {result['overall_risk_score']}/100")
             print(f"   Risk Level: {result['risk_level']}")
             print(f"   CSF Gaps Found: {len(result['csf_compliance_gaps'])}")
@@ -61,12 +61,12 @@ def test_action_plan_integration():
             if result['csf_compliance_gaps']:
                 print(f"\n🔍 CSF COMPLIANCE GAPS:")
                 for gap in result['csf_compliance_gaps'][:5]:  # Show first 5
-                    severity_icon = {"Critical": "🚨", "High": "🔶", "Medium": "⚠️", "Low": "ℹ️"}.get(gap['severity'], "•")
+                    severity_icon = {"Critical": "CRITICAL", "High": "HIGH", "Medium": "WARNING", "Low": "INFO"}.get(gap['severity'], "•")
                     print(f"   {severity_icon} {gap['category']}: {gap['description']}")
             
             # Display detailed action plan
             if result.get('action_plan'):
-                print(f"\n🎯 DETAILED ACTION PLAN:")
+                print(f"\nTARGET DETAILED ACTION PLAN:")
                 for i, action in enumerate(result['action_plan'][:3], 1):  # Show first 3
                     print(f"\n   ACTION {i}: {action['action']}")
                     print(f"   • Category: {action['category']}")
@@ -77,21 +77,21 @@ def test_action_plan_integration():
             
             # Display basic recommendations
             if result['recommended_actions']:
-                print(f"\n💡 QUICK RECOMMENDATIONS:")
+                print(f"\nTIP QUICK RECOMMENDATIONS:")
                 for rec in result['recommended_actions']:
                     print(f"   • {rec}")
                     
-            print(f"\n✅ ACTION PLAN INTEGRATION: SUCCESSFUL")
+            print(f"\nPASS ACTION PLAN INTEGRATION: SUCCESSFUL")
             print(f"   • Generated {len(result.get('action_plan', []))} detailed action items")
             print(f"   • Included cost estimates and timelines")
             print(f"   • Provided success criteria for each action")
             
         else:
-            print(f"❌ Assessment failed: HTTP {response.status_code}")
+            print(f"FAIL Assessment failed: HTTP {response.status_code}")
             print(f"Response: {response.text}")
             
     except Exception as e:
-        print(f"❌ Test failed: {str(e)}")
+        print(f"FAIL Test failed: {str(e)}")
 
 def test_low_risk_system():
     """Test a low-risk system to see difference in action plans."""
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     test_action_plan_integration()
     test_low_risk_system()
     
-    print(f"\n🎉 ACTION PLAN INTEGRATION TESTING COMPLETE")
+    print(f"\nSUCCESS ACTION PLAN INTEGRATION TESTING COMPLETE")
     print(f"=" * 50)
     print(f"The NIST-AI-SCM Toolkit now includes:")
     print(f"• Quantitative risk assessment (0-100 scoring)")
@@ -142,4 +142,4 @@ if __name__ == "__main__":
     print(f"• Detailed remediation action plans")
     print(f"• Cost estimates and implementation timelines")
     print(f"• Success criteria and priority rankings")
-    print(f"\n🎯 Ready for federal agency demonstrations!")
+    print(f"\nTARGET Research prototype ready for evaluation!")

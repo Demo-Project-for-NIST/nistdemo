@@ -7,7 +7,7 @@ import json
 
 def test_dashboard_api_calls():
     """Test the exact API calls the dashboard would make."""
-    print("🧪 Testing Dashboard API Functionality")
+    print("TESTING Dashboard API Functionality")
     print("=" * 50)
     
     base_url = "http://localhost:8001"
@@ -16,13 +16,13 @@ def test_dashboard_api_calls():
     try:
         response = requests.get(f"{base_url}/health")
         if response.status_code == 200:
-            print("✅ Health Check: PASS")
+            print("PASS Health Check: PASS")
             print(f"   Response: {response.json()}")
         else:
-            print("❌ Health Check: FAIL")
+            print("FAIL Health Check: FAIL")
             return False
     except Exception as e:
-        print(f"❌ Health Check Error: {e}")
+        print(f"FAIL Health Check Error: {e}")
         return False
     
     # Test 2: Risk Assessment (main dashboard function)
@@ -42,7 +42,7 @@ def test_dashboard_api_calls():
         )
         if response.status_code == 200:
             result = response.json()
-            print("✅ Risk Assessment: PASS")
+            print("PASS Risk Assessment: PASS")
             print(f"   System: {result['system_name']}")
             print(f"   Risk Score: {result['overall_risk_score']}/100")
             print(f"   Risk Level: {result['risk_level']}")
@@ -52,18 +52,18 @@ def test_dashboard_api_calls():
             # Test action plan structure
             if result.get('action_plan'):
                 action = result['action_plan'][0]
-                print(f"\n📋 First Action Plan:")
+                print(f"\nINFO First Action Plan:")
                 print(f"   • Action: {action['action']}")
                 print(f"   • Priority: {action['priority']}")
                 print(f"   • Timeline: {action['timeline']}")
                 print(f"   • Cost: {action['cost_estimate']}")
                 print(f"   • Category: {action['category']}")
         else:
-            print(f"❌ Risk Assessment: FAIL ({response.status_code})")
+            print(f"FAIL Risk Assessment: FAIL ({response.status_code})")
             print(f"   Error: {response.text}")
             return False
     except Exception as e:
-        print(f"❌ Risk Assessment Error: {e}")
+        print(f"FAIL Risk Assessment Error: {e}")
         return False
     
     # Test 3: CSF Mapping (dashboard explorer)
@@ -71,47 +71,47 @@ def test_dashboard_api_calls():
         response = requests.get(f"{base_url}/csf-mapping/training_data_poisoning")
         if response.status_code == 200:
             result = response.json()
-            print("\n✅ CSF Mapping: PASS")
+            print("\nPASS CSF Mapping: PASS")
             print(f"   Risk Type: {result['risk_type']}")
             print(f"   Description: {result['description']}")
             print(f"   Mapped Categories: {len(result['mapped_categories'])}")
         else:
-            print(f"❌ CSF Mapping: FAIL ({response.status_code})")
+            print(f"FAIL CSF Mapping: FAIL ({response.status_code})")
             return False
     except Exception as e:
-        print(f"❌ CSF Mapping Error: {e}")
+        print(f"FAIL CSF Mapping Error: {e}")
         return False
     
-    print(f"\n🎯 Dashboard API Functionality: COMPLETE")
-    print(f"✅ All API endpoints working correctly")
-    print(f"✅ Action plans included in responses")
-    print(f"✅ Ready for browser-based dashboard")
+    print(f"\nTARGET Dashboard API Functionality: COMPLETE")
+    print(f"PASS All API endpoints working correctly")
+    print(f"PASS Action plans included in responses")
+    print(f"PASS Ready for browser-based dashboard")
     
     return True
 
 def test_dashboard_access():
     """Test dashboard file accessibility."""
-    print(f"\n🌐 Testing Dashboard Access")
+    print(f"\nWEB Testing Dashboard Access")
     print("-" * 30)
     
     try:
         # Test dashboard server
         response = requests.get("http://localhost:8081/visual_dashboard.html")
         if response.status_code == 200:
-            print("✅ Dashboard Server: ACCESSIBLE")
+            print("PASS Dashboard Server: ACCESSIBLE")
             print(f"   URL: http://localhost:8081/visual_dashboard.html")
             
             # Check if it contains our action plan updates
             if "Detailed Action Plan" in response.text:
-                print("✅ Action Plan UI: PRESENT")
+                print("PASS Action Plan UI: PRESENT")
             else:
-                print("❌ Action Plan UI: MISSING")
+                print("FAIL Action Plan UI: MISSING")
                 
         else:
-            print(f"❌ Dashboard Server: FAIL ({response.status_code})")
+            print(f"FAIL Dashboard Server: FAIL ({response.status_code})")
     except Exception as e:
-        print(f"❌ Dashboard Server Error: {e}")
-        print("🔧 Try starting dashboard server:")
+        print(f"FAIL Dashboard Server Error: {e}")
+        print("FIX Try starting dashboard server:")
         print("   python serve_dashboard.py --port 8081")
 
 if __name__ == "__main__":
@@ -119,9 +119,9 @@ if __name__ == "__main__":
     test_dashboard_access()
     
     if success:
-        print(f"\n🎉 DASHBOARD FUNCTIONALITY TEST: PASSED")
-        print(f"🌐 Open in browser: http://localhost:8081/visual_dashboard.html")
-        print(f"📝 Dashboard should show action plans with costs and timelines")
+        print(f"\nSUCCESS DASHBOARD FUNCTIONALITY TEST: PASSED")
+        print(f"OPEN in browser: http://localhost:8081/visual_dashboard.html")
+        print(f"NOTE Dashboard should show action plans with costs and timelines")
     else:
-        print(f"\n❌ DASHBOARD FUNCTIONALITY TEST: FAILED")
-        print(f"🔧 Check API server and try again")
+        print(f"\nFAIL DASHBOARD FUNCTIONALITY TEST: FAILED")
+        print(f"FIX Check API server and try again")

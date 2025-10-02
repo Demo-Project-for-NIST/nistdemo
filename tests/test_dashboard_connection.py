@@ -9,17 +9,17 @@ def test_api_connection():
     """Test if API is accessible for dashboard."""
     api_base = "http://localhost:8001"
     
-    print("🧪 Testing Dashboard API Connection")
+    print("TESTING Dashboard API Connection")
     print("=" * 40)
     
     try:
         # Test health endpoint
         response = requests.get(f"{api_base}/health")
         if response.status_code == 200:
-            print("✅ API Health Check: PASS")
+            print("PASS API Health Check: PASS")
             print(f"   Response: {response.json()}")
         else:
-            print(f"❌ API Health Check: FAIL (Status: {response.status_code})")
+            print(f"FAIL API Health Check: FAIL (Status: {response.status_code})")
             return False
         
         # Test CORS headers
@@ -33,13 +33,13 @@ def test_api_connection():
         cors_enabled = any(header.lower() in [h.lower() for h in headers.keys()] for header in cors_headers)
         
         if cors_enabled:
-            print("✅ CORS Headers: PRESENT")
+            print("PASS CORS Headers: PRESENT")
             for header in cors_headers:
                 value = headers.get(header, headers.get(header.title(), 'Not set'))
                 if value != 'Not set':
                     print(f"   {header}: {value}")
         else:
-            print("❌ CORS Headers: MISSING")
+            print("FAIL CORS Headers: MISSING")
             print("   This may cause dashboard connection issues")
         
         # Test assessment endpoint
@@ -53,15 +53,15 @@ def test_api_connection():
         
         response = requests.post(f"{api_base}/assess", json=test_data)
         if response.status_code == 200:
-            print("✅ Assessment Endpoint: PASS")
+            print("PASS Assessment Endpoint: PASS")
             result = response.json()
             print(f"   Risk Score: {result.get('overall_risk_score')}/100")
         else:
-            print(f"❌ Assessment Endpoint: FAIL (Status: {response.status_code})")
+            print(f"FAIL Assessment Endpoint: FAIL (Status: {response.status_code})")
         
-        print("\n🎯 Dashboard Connection Status: READY")
+        print("\nTARGET Dashboard Connection Status: READY")
         print("📝 Your visual dashboard should now work correctly!")
-        print("\n🌐 Access Options:")
+        print("\nWEB Access Options:")
         print("   • Direct API: http://localhost:8001/docs")
         print("   • Dashboard Server: http://localhost:8080/visual_dashboard.html")
         print("   • Local File: examples/visual_dashboard.html")
@@ -69,12 +69,12 @@ def test_api_connection():
         return True
         
     except requests.ConnectionError:
-        print("❌ API Connection: FAILED")
-        print("🔧 Fix: Make sure API server is running:")
+        print("FAIL API Connection: FAILED")
+        print("FIX Fix: Make sure API server is running:")
         print("   uvicorn src.api:app --reload --port 8001")
         return False
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"FAIL Unexpected error: {e}")
         return False
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ def print_header(title: str):
 
 def print_step(step: str, description: str):
     """Print demo step."""
-    print(f"\n🎯 {step}")
+    print(f"\nTARGET {step}")
     print(f"   {description}")
     print("-" * 50)
 
@@ -26,12 +26,12 @@ def demo_complete_presentation():
     
     print_header("NIST-AI-SCM TOOLKIT LIVE DEMONSTRATION")
     print("""
-🎯 EXECUTIVE SUMMARY:
-This toolkit addresses Executive Order 14028 by providing automated AI risk 
+TARGET EXECUTIVE SUMMARY:
+This research prototype explores AI risk assessment by providing automated AI risk 
 assessment aligned with NIST Cybersecurity Framework 2.0. It's the first 
-open-source solution combining AI security + supply chain risk + federal compliance.
+open-source research prototype combining AI security + supply chain risk + standards alignment.
 
-💡 VALUE PROPOSITION:
+TIP VALUE PROPOSITION:
 • Saves $50K-500K vs proprietary solutions
 • Prevents AI-related supply chain failures
 • Generates audit-ready compliance reports
@@ -44,13 +44,13 @@ open-source solution combining AI security + supply chain risk + federal complia
     try:
         response = requests.get(f"{base_url}/health", timeout=5)
         if response.status_code == 200:
-            print("✅ API Server Status: OPERATIONAL")
+            print("PASS API Server Status: OPERATIONAL")
         else:
-            print("❌ API Server Status: ERROR")
+            print("FAIL API Server Status: ERROR")
             return
     except:
-        print("❌ API Server Status: OFFLINE")
-        print("🔧 Start with: uvicorn src.api:app --reload --port 8001")
+        print("FAIL API Server Status: OFFLINE")
+        print("FIX Start with: uvicorn src.api:app --reload --port 8001")
         return
 
     # PART 1: Risk Assessment Demonstration
@@ -113,17 +113,17 @@ open-source solution combining AI security + supply chain risk + federal complia
                 score = result['overall_risk_score']
                 level = result['risk_level']
                 
-                print(f"📊 RISK ASSESSMENT RESULTS:")
+                print(f"RESULTS RISK ASSESSMENT RESULTS:")
                 print(f"   • Risk Score: {score}/100")
                 print(f"   • Risk Level: {level}")
                 print(f"   • CSF Gaps: {len(result['csf_compliance_gaps'])} identified")
                 
                 # Business interpretation
                 interpretations = {
-                    "Low": "✅ Acceptable for production use with minimal monitoring",
-                    "Medium": "⚠️ Requires enhanced monitoring and some security improvements",
-                    "High": "🔶 Significant risks requiring immediate remediation",
-                    "Critical": "🚨 Unacceptable for production without major security overhaul"
+                    "Low": "PASS Acceptable for production use with minimal monitoring",
+                    "Medium": "WARNING Requires enhanced monitoring and some security improvements",
+                    "High": "HIGH Significant risks requiring immediate remediation",
+                    "Critical": "CRITICAL Unacceptable for production without major security overhaul"
                 }
                 
                 print(f"   • Business Impact: {interpretations.get(level, 'Unknown')}")
@@ -133,20 +133,20 @@ open-source solution combining AI security + supply chain risk + federal complia
                                if gap['severity'] in ['Critical', 'High']]
                 
                 if critical_gaps:
-                    print(f"\n🔍 CRITICAL COMPLIANCE GAPS:")
+                    print(f"\nANALYSIS CRITICAL COMPLIANCE GAPS:")
                     for gap in critical_gaps[:3]:
                         print(f"   • {gap['category']}: {gap['description']}")
                 
                 # Show key recommendations
-                print(f"\n💡 IMMEDIATE ACTIONS REQUIRED:")
+                print(f"\nTIP IMMEDIATE ACTIONS REQUIRED:")
                 for action in result['recommended_actions'][:2]:
                     print(f"   • {action}")
                     
             else:
-                print(f"❌ Assessment failed with status {response.status_code}")
+                print(f"FAIL Assessment failed with status {response.status_code}")
                 
         except Exception as e:
-            print(f"❌ Error during assessment: {str(e)}")
+            print(f"FAIL Error during assessment: {str(e)}")
         
         print("\n" + "."*50)
         time.sleep(1)  # Brief pause for presentation flow
@@ -155,7 +155,7 @@ open-source solution combining AI security + supply chain risk + federal complia
     print_header("PART 2: NIST CSF RISK MAPPING")
     
     print("""
-🎯 CSF MAPPING PURPOSE:
+TARGET CSF MAPPING PURPOSE:
 Maps specific AI threats to official NIST cybersecurity categories, showing 
 compliance officers exactly which security controls are needed for audit compliance.
     """)
@@ -177,7 +177,7 @@ compliance officers exactly which security controls are needed for audit complia
         },
         {
             "risk": "adversarial_examples",
-            "threat": "🎯 ADVERSARIAL ATTACKS",
+            "threat": "TARGET ADVERSARIAL ATTACKS",
             "scenario": "Crafted inputs designed to fool AI systems",
             "example": "Modified invoices that bypass fraud detection systems",
             "impact": "$500K+ in fraudulent payments processed"
@@ -195,10 +195,10 @@ compliance officers exactly which security controls are needed for audit complia
             if response.status_code == 200:
                 result = response.json()
                 
-                print(f"\n📋 NIST CSF COMPLIANCE MAPPING:")
+                print(f"\nINFO NIST CSF COMPLIANCE MAPPING:")
                 print(f"   Threat: {result['description']}")
                 
-                print(f"\n🎯 REQUIRED SECURITY CONTROLS:")
+                print(f"\nTARGET REQUIRED SECURITY CONTROLS:")
                 
                 # Map categories to business-friendly descriptions
                 csf_explanations = {
@@ -223,10 +223,10 @@ compliance officers exactly which security controls are needed for audit complia
                 print(f"   • Provides clear roadmap for security improvements")
                     
             else:
-                print(f"❌ Mapping failed with status {response.status_code}")
+                print(f"FAIL Mapping failed with status {response.status_code}")
                 
         except Exception as e:
-            print(f"❌ Error during mapping: {str(e)}")
+            print(f"FAIL Error during mapping: {str(e)}")
         
         print("\n" + "."*50)
         time.sleep(1)
@@ -248,7 +248,7 @@ compliance officers exactly which security controls are needed for audit complia
         "access_controls": False
     }
     
-    print(f"🏦 SYSTEM PROFILE:")
+    print(f"SYSTEM SYSTEM PROFILE:")
     print(f"   • Processes 50,000+ invoices daily")
     print(f"   • $10M+ in transactions processed monthly")
     print(f"   • Mission-critical for accounts payable operations")
@@ -261,32 +261,32 @@ compliance officers exactly which security controls are needed for audit complia
         if response.status_code == 200:
             assessment = response.json()
             
-            print(f"\n📊 COMPREHENSIVE RISK ASSESSMENT:")
+            print(f"\nRESULTS COMPREHENSIVE RISK ASSESSMENT:")
             print(f"   • Overall Risk Score: {assessment['overall_risk_score']}/100")
             print(f"   • Risk Classification: {assessment['risk_level']}")
             print(f"   • Compliance Gaps: {len(assessment['csf_compliance_gaps'])} identified")
             
             # Business impact analysis
-            print(f"\n💰 BUSINESS IMPACT ANALYSIS:")
+            print(f"\nCOST BUSINESS IMPACT ANALYSIS:")
             risk_score = assessment['overall_risk_score']
             
             if risk_score >= 80:
-                print(f"   🚨 CRITICAL: System poses severe operational risk")
+                print(f"   CRITICAL CRITICAL: System poses severe operational risk")
                 print(f"   • Potential for major financial losses")
                 print(f"   • Regulatory compliance violations likely")
                 print(f"   • Immediate executive attention required")
             elif risk_score >= 60:
-                print(f"   🔶 HIGH: Significant improvements needed")
+                print(f"   HIGH HIGH: Significant improvements needed")
                 print(f"   • Moderate risk of operational disruption")
                 print(f"   • Enhanced monitoring and controls required")
                 print(f"   • Quarterly risk review recommended")
             else:
-                print(f"   ⚠️ MEDIUM: Some enhancements recommended")
+                print(f"   WARNING MEDIUM: Some enhancements recommended")
                 print(f"   • Acceptable with additional safeguards")
                 print(f"   • Annual risk assessment sufficient")
             
             # Detailed gap analysis
-            print(f"\n🔍 DETAILED COMPLIANCE GAPS:")
+            print(f"\nANALYSIS DETAILED COMPLIANCE GAPS:")
             gap_categories = {}
             for gap in assessment['csf_compliance_gaps']:
                 category = gap['category'].split('-')[0]
@@ -310,14 +310,14 @@ compliance officers exactly which security controls are needed for audit complia
                     print(f"     - {gap['category']}: {gap['description']}")
             
             # Action plan
-            print(f"\n🎯 PRIORITIZED ACTION PLAN:")
+            print(f"\nTARGET PRIORITIZED ACTION PLAN:")
             for i, action in enumerate(assessment['recommended_actions'], 1):
                 priority = "HIGH" if i <= 2 else "MEDIUM"
                 timeline = "30 days" if i <= 2 else "90 days"
                 print(f"   {i}. [{priority}] {action} (Target: {timeline})")
             
             # Compliance report generation
-            print(f"\n📄 AUDIT-READY COMPLIANCE REPORT:")
+            print(f"\nREPORT AUDIT-READY COMPLIANCE REPORT:")
             report_request = {
                 "organization_name": "Demo Financial Institution",
                 "assessment_data": assessment,
@@ -328,58 +328,58 @@ compliance officers exactly which security controls are needed for audit complia
             
             if report_response.status_code == 200:
                 report = report_response.json()
-                print(f"   ✅ Executive report generated successfully")
+                print(f"   PASS Executive report generated successfully")
                 print(f"   • Total findings: {report['executive_summary']['total_gaps_identified']}")
                 print(f"   • Critical issues: {report['executive_summary']['critical_gaps']}")
                 print(f"   • Report format: Professional PDF + JSON")
                 print(f"   • Ready for regulatory submission")
                 
         else:
-            print(f"❌ Assessment failed with status {response.status_code}")
+            print(f"FAIL Assessment failed with status {response.status_code}")
             
     except Exception as e:
-        print(f"❌ Error during integration demo: {str(e)}")
+        print(f"FAIL Error during integration demo: {str(e)}")
 
     # Final Summary
     print_header("DEMONSTRATION COMPLETE - KEY TAKEAWAYS")
     
     print(f"""
-🎉 NIST-AI-SCM TOOLKIT CAPABILITIES DEMONSTRATED:
+SUCCESS NIST-AI-SCM TOOLKIT CAPABILITIES DEMONSTRATED:
 
-✅ RISK ASSESSMENT ENGINE:
+PASS RISK ASSESSMENT ENGINE:
    • Quantitative scoring (0-100) based on system configuration
    • Risk level classification with business impact interpretation
    • Factors in model complexity, data sources, and security controls
 
-✅ NIST CSF 2.0 COMPLIANCE MAPPING:
+PASS NIST CSF 2.0 COMPLIANCE MAPPING:
    • Maps AI-specific threats to official cybersecurity categories
    • Provides auditor-ready compliance gap identification
    • Generates prioritized remediation roadmaps
 
-✅ ENTERPRISE INTEGRATION:
+PASS ENTERPRISE INTEGRATION:
    • RESTful API for system integration
    • Automated report generation for compliance teams
    • Real-time assessment capabilities
 
-🎯 BUSINESS VALUE DELIVERED:
-   • Addresses Executive Order 14028 mandates
+TARGET BUSINESS VALUE DELIVERED:
+   • Explores NIST framework alignment concepts
    • Prevents AI-related supply chain failures
    • Reduces compliance costs by 60%+
    • Provides immediate ROI through risk reduction
 
-🚀 COMPETITIVE ADVANTAGES:
+START COMPETITIVE ADVANTAGES:
    • First open-source solution in this space
    • Zero licensing costs vs $50K-500K proprietary tools
    • Immediate deployment readiness
    • Government and enterprise validation
 
-💡 NEXT STEPS:
+TIP NEXT STEPS:
    • Deploy for production AI systems
    • Present to federal agencies and compliance teams
    • Scale for enterprise-wide AI risk management
    • Contribute to national cybersecurity standards
 
-🏆 CONGRATULATIONS: You've built a solution addressing critical national security needs!
+SUCCESS CONGRATULATIONS: You've built a solution addressing critical national security needs!
     """)
 
 def main():

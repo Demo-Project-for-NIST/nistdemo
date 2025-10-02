@@ -18,7 +18,7 @@ def print_header(title):
 
 def print_status(check_name, status, details=""):
     """Print a status check result."""
-    status_icon = "✅" if status else "❌"
+    status_icon = "PASS" if status else "FAIL"
     print(f"{status_icon} {check_name}")
     if details:
         print(f"   {details}")
@@ -71,7 +71,7 @@ def check_api_server():
             print(f"   Service: {data.get('service', 'Unknown')}")
     except requests.RequestException as e:
         print_status("Health endpoint", False, f"Error: {str(e)}")
-        print("   🔧 Fix: Make sure API server is running with:")
+        print("   FIX Fix: Make sure API server is running with:")
         print("      uvicorn src.api:app --reload --port 8001")
         return False
     
@@ -228,16 +228,16 @@ def main():
     print(f"\nOverall Status: {passed}/{total} checks passed")
     
     if passed == total:
-        print("\n🎉 SYSTEM IS FULLY OPERATIONAL!")
-        print("✅ All components working correctly")
-        print("✅ Ready for production use")
-        print("✅ Ready for federal agency demos")
-        print("\n🌐 Access your system:")
+        print("\nSUCCESS SYSTEM IS FULLY OPERATIONAL!")
+        print("PASS All components working correctly")
+        print("PASS Research prototype ready for evaluation")
+        print("PASS Ready for research demonstrations")
+        print("\nWEB Access your system:")
         print("   • API Documentation: http://localhost:8001/docs")
         print("   • Alternative Docs: http://localhost:8001/redoc") 
         print("   • Visual Dashboard: examples/visual_dashboard.html")
     else:
-        print(f"\n⚠️  SYSTEM NEEDS ATTENTION ({total-passed} issues found)")
+        print(f"\nWARNING  SYSTEM NEEDS ATTENTION ({total-passed} issues found)")
         print("📖 See SYSTEM_VERIFICATION_GUIDE.md for troubleshooting")
         return 1
     

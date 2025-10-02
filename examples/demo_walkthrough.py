@@ -17,7 +17,7 @@ def print_header(title: str):
 
 def print_step(step: str, description: str):
     """Print demo step."""
-    print(f"\n🎯 {step}")
+    print(f"\nTARGET {step}")
     print(f"   {description}")
     print("-" * 40)
 
@@ -81,7 +81,7 @@ def demonstrate_risk_assessment():
             if response.status_code == 200:
                 result = response.json()
                 
-                print(f"📊 ASSESSMENT RESULTS:")
+                print(f"RESULTS ASSESSMENT RESULTS:")
                 print(f"   System: {result['system_name']}")
                 print(f"   Risk Score: {result['overall_risk_score']}/100")
                 print(f"   Risk Level: {result['risk_level']}")
@@ -89,10 +89,10 @@ def demonstrate_risk_assessment():
                 
                 # Show risk level explanation
                 risk_explanations = {
-                    "Low": "✅ Well-secured system with minimal vulnerabilities",
-                    "Medium": "⚠️ Some risks present, improvements recommended", 
-                    "High": "🔶 Significant risks, action required",
-                    "Critical": "🚨 Severe risks, immediate action required"
+                    "Low": "PASS Well-secured system with minimal vulnerabilities",
+                    "Medium": "WARNING Some risks present, improvements recommended", 
+                    "High": "HIGH Significant risks, action required",
+                    "Critical": "CRITICAL Severe risks, immediate action required"
                 }
                 
                 explanation = risk_explanations.get(result['risk_level'], "Unknown risk level")
@@ -100,24 +100,24 @@ def demonstrate_risk_assessment():
                 
                 # Show top 3 gaps
                 if result['csf_compliance_gaps']:
-                    print(f"\n   🔍 TOP COMPLIANCE GAPS:")
+                    print(f"\n   ANALYSIS TOP COMPLIANCE GAPS:")
                     for gap in result['csf_compliance_gaps'][:3]:
-                        severity_icon = {"Critical": "🚨", "High": "🔶", "Medium": "⚠️", "Low": "ℹ️"}.get(gap['severity'], "•")
+                        severity_icon = {"Critical": "CRITICAL", "High": "HIGH", "Medium": "WARNING", "Low": "INFO"}.get(gap['severity'], "•")
                         print(f"   {severity_icon} {gap['category']}: {gap['description']}")
                 
                 # Show top 2 recommendations
                 if result['recommended_actions']:
-                    print(f"\n   💡 KEY RECOMMENDATIONS:")
+                    print(f"\n   TIP KEY RECOMMENDATIONS:")
                     for action in result['recommended_actions'][:2]:
                         print(f"   • {action}")
                         
             else:
-                print(f"❌ Assessment failed: {response.status_code}")
+                print(f"FAIL Assessment failed: {response.status_code}")
                 
         except Exception as e:
-            print(f"❌ Error: {str(e)}")
+            print(f"FAIL Error: {str(e)}")
             
-        input("\n⏸️  Press Enter to continue to next demo...")
+        input("\nPAUSE  Press Enter to continue to next demo...")
 
 def demonstrate_csf_mapping():
     """Demonstrate CSF risk mapping with explanations."""
@@ -160,7 +160,7 @@ def demonstrate_csf_mapping():
             if response.status_code == 200:
                 result = response.json()
                 
-                print(f"\n📋 NIST CSF MAPPING RESULTS:")
+                print(f"\nINFO NIST CSF MAPPING RESULTS:")
                 print(f"   Risk Description: {result['description']}")
                 
                 print(f"\nMAPPED CSF CATEGORIES:")
@@ -181,18 +181,18 @@ def demonstrate_csf_mapping():
                     print(f"   • {category['code']} ({explanation}) - {category['severity']} Priority")
                     print(f"     {category['description']}")
                 
-                print(f"\n💡 What this means:")
+                print(f"\nTIP What this means:")
                 print(f"   • Your organization needs controls in these CSF categories")
                 print(f"   • Higher severity = more urgent implementation required")
                 print(f"   • This provides your compliance roadmap")
                 
             else:
-                print(f"❌ Mapping failed: {response.status_code}")
+                print(f"FAIL Mapping failed: {response.status_code}")
                 
         except Exception as e:
-            print(f"❌ Error: {str(e)}")
+            print(f"FAIL Error: {str(e)}")
             
-        input("\n⏸️  Press Enter to continue to next scenario...")
+        input("\nPAUSE  Press Enter to continue to next scenario...")
 
 def demonstrate_integration():
     """Demonstrate how assessment and mapping work together."""
@@ -216,7 +216,7 @@ def demonstrate_integration():
     
     base_url = "http://localhost:8001"
     
-    print("🏦 SYSTEM DETAILS:")
+    print("SYSTEM SYSTEM DETAILS:")
     print(f"   • Processes 10,000+ invoices daily")
     print(f"   • Uses neural network for fraud detection")
     print(f"   • Integrates with multiple data sources")
@@ -224,7 +224,7 @@ def demonstrate_integration():
     
     try:
         # Step 1: Risk Assessment
-        print(f"\n📊 STEP 1: COMPREHENSIVE RISK ASSESSMENT")
+        print(f"\nRESULTS STEP 1: COMPREHENSIVE RISK ASSESSMENT")
         response = requests.post(f"{base_url}/assess", json=financial_ai_system, timeout=10)
         
         if response.status_code == 200:
@@ -235,7 +235,7 @@ def demonstrate_integration():
             print(f"   Compliance Gaps: {len(assessment['csf_compliance_gaps'])} identified")
             
             # Step 2: Analyze specific risks
-            print(f"\n🔍 STEP 2: DETAILED GAP ANALYSIS")
+            print(f"\nANALYSIS STEP 2: DETAILED GAP ANALYSIS")
             for gap in assessment['csf_compliance_gaps']:
                 print(f"   • {gap['category']}: {gap['description']} [{gap['severity']}]")
             
@@ -259,12 +259,12 @@ def demonstrate_integration():
                 print(f"   • {function}: {impact}")
             
             # Step 4: Generate action plan
-            print(f"\n🎯 STEP 4: PRIORITIZED ACTION PLAN")
+            print(f"\nTARGET STEP 4: PRIORITIZED ACTION PLAN")
             for i, action in enumerate(assessment['recommended_actions'], 1):
                 print(f"   {i}. {action}")
             
             # Step 5: Report generation
-            print(f"\n📄 STEP 5: COMPLIANCE REPORT GENERATION")
+            print(f"\nREPORT STEP 5: COMPLIANCE REPORT GENERATION")
             report_request = {
                 "organization_name": "Demo Financial Institution",
                 "assessment_data": assessment,
@@ -275,35 +275,35 @@ def demonstrate_integration():
             
             if report_response.status_code == 200:
                 report = report_response.json()
-                print(f"   ✅ Report generated successfully")
+                print(f"   PASS Report generated successfully")
                 print(f"   • Executive Summary: {report['executive_summary']['total_gaps_identified']} gaps found")
                 print(f"   • Critical Issues: {report['executive_summary']['critical_gaps']}")
                 print(f"   • Report ready for audit submission")
             
         else:
-            print(f"❌ Assessment failed: {response.status_code}")
+            print(f"FAIL Assessment failed: {response.status_code}")
             
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"FAIL Error: {str(e)}")
 
 def main():
     """Run complete interactive demo."""
     print_header("NIST-AI-SCM TOOLKIT INTERACTIVE DEMO")
     
     print("""
-🎯 Welcome to the NIST AI Risk Management Toolkit Demo!
+TARGET Welcome to the NIST AI Risk Management Toolkit Demo!
 
 This interactive demonstration will show you:
 1. How AI system risk assessment works
 2. How NIST CSF mapping identifies compliance gaps  
 3. How to generate actionable remediation plans
 
-📋 Prerequisites:
+INFO Prerequisites:
 • API server running on localhost:8001
-• Understanding that this addresses Executive Order 14028
+• Understanding that this explores NIST framework concepts
 • Recognition that this is the first open-source tool of its kind
 
-🚀 Let's begin!
+START Let's begin!
     """)
     
     input("Press Enter to start the demonstration...")
@@ -312,11 +312,11 @@ This interactive demonstration will show you:
         # Check API connectivity
         response = requests.get("http://localhost:8001/health", timeout=5)
         if response.status_code != 200:
-            print("❌ API server not responding. Please start with:")
+            print("FAIL API server not responding. Please start with:")
             print("   uvicorn src.api:app --reload --port 8001")
             return
         
-        print("✅ API server connected successfully!")
+        print("PASS API server connected successfully!")
         
         # Run demonstrations
         demonstrate_risk_assessment()
@@ -325,29 +325,29 @@ This interactive demonstration will show you:
         
         print_header("DEMO COMPLETE - KEY TAKEAWAYS")
         print("""
-🎉 Congratulations! You've seen the complete NIST-AI-SCM Toolkit in action.
+SUCCESS Congratulations! You've seen the complete NIST-AI-SCM Toolkit in action.
 
-🎯 What you've learned:
+TARGET What you've learned:
 • How to assess AI system cybersecurity risks quantitatively
 • How NIST CSF 2.0 categories map to specific AI vulnerabilities
 • How to generate compliance reports for auditors and regulators
 • How this addresses federal mandates and industry needs
 
-🚀 Next steps:
+START Next steps:
 • Deploy this for real AI systems in your organization
 • Present to federal agencies and compliance teams
 • Contribute to the open-source project
 • Use for academic research and publications
 
-💡 Remember: You've built something that addresses a critical national need!
+TIP Remember: You've built something that addresses a critical national need!
         """)
         
     except requests.ConnectionError:
-        print("❌ Cannot connect to API server.")
-        print("🔧 Please start the server with:")
+        print("FAIL Cannot connect to API server.")
+        print("FIX Please start the server with:")
         print("   uvicorn src.api:app --reload --port 8001")
     except Exception as e:
-        print(f"❌ Demo error: {str(e)}")
+        print(f"FAIL Demo error: {str(e)}")
 
 if __name__ == "__main__":
     main()

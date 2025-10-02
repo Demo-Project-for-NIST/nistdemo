@@ -33,7 +33,18 @@ class RiskScorer:
     
     def assess_system(self, system_config: Dict) -> Dict:
         """
-        Assess overall risk score for an AI/ML system.
+        Assess overall risk score for an AI/ML system using six weighted factors.
+        
+        Implements the mathematical formula: R = min(100, (Σ wi × fi) × α)
+        Where wi are weights [20, 15, 25, 20, 10, 5] and fi are binary indicators.
+        
+        The six risk factors are:
+        1. Data lineage documentation (weight: 20) - Training data provenance
+        2. Model explainability (weight: 15) - Black-box vs interpretable models  
+        3. Drift monitoring (weight: 25) - Performance degradation detection
+        4. Third-party components (weight: 20) - Dependency vulnerability assessment
+        5. Data encryption (weight: 10) - Data security controls
+        6. Access controls (weight: 5) - Authentication and authorization
         
         Args:
             system_config: AI system configuration dictionary
@@ -297,7 +308,8 @@ class RiskScorer:
             # Calculate stress multiplier based on real data
             stress_multiplier = self._calculate_stress_multiplier(vix_data, gdp_data)
             
-            return min(stress_multiplier, 2.0)  # Cap at 2.0x multiplier
+            # Enforce bounds: 1.0 <= alpha <= 2.0 as per mathematical framework
+            return max(1.0, min(stress_multiplier, 2.0))
             
         except Exception as e:
             # Fall back to safe default if API fails
@@ -389,9 +401,14 @@ class RiskScorer:
         """
         Fallback economic stress calculation when API unavailable.
         Uses conservative baseline rather than seasonal simulation.
+        
+        Returns:
+            Economic stress multiplier within bounds [1.0, 2.0]
         """
         # Conservative baseline - moderate stress assumption
-        return 1.2
+        # Ensures multiplier stays within mathematical framework bounds
+        fallback_multiplier = 1.2
+        return max(1.0, min(fallback_multiplier, 2.0))
     
     def get_risk_breakdown(self, system_config: Dict) -> Dict:
         """

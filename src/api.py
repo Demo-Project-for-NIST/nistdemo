@@ -29,13 +29,22 @@ from .csf_mapper import CSFMapper
 from .risk_scorer import RiskScorer
 from .action_planner import ActionPlanner
 
-# Initialize FastAPI app
+# Initialize FastAPI app with comprehensive documentation
 app = FastAPI(
     title="NIST AI Risk Management Toolkit",
     description="Open-source AI risk assessment and management, aligned with NIST CSF 2.0",
     version="0.1.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    docs_url="/docs",  # Interactive Swagger UI documentation
+    redoc_url="/redoc",  # Alternative ReDoc documentation
+    openapi_url="/openapi.json",  # OpenAPI schema endpoint
+    contact={
+        "name": "NIST AI Risk Management Toolkit",
+        "url": "https://github.com/Demo-Project-for-NIST/nistdemo",
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT",
+    }
 )
 
 # Add CORS middleware to allow web browser access

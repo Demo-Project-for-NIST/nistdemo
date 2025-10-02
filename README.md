@@ -2,9 +2,11 @@
 
 [![Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](https://nistdemo.onrender.com/demo)
 [![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://nistdemo.onrender.com/docs)
-[![Status](https://img.shields.io/badge/Status-Production_Ready-green)]()
+[![Status](https://img.shields.io/badge/Status-Research_Prototype-orange)]()
 
-Open-source AI risk assessment and management toolkit, aligned with NIST Cybersecurity Framework 2.0.
+Research prototype for AI risk assessment and management, exploring alignment with NIST Cybersecurity Framework 2.0.
+
+**Disclaimer**: This is a research prototype demonstrating concepts for AI risk assessment. Not intended for production use without validation and enhancement.
 
 ## Live Demo
 
@@ -23,12 +25,12 @@ The NIST AI Risk Management Toolkit provides automated risk assessment for AI/ML
 
 ### Key Features
 
-- **Six-Factor Risk Scoring**: Mathematical framework with 95-point scale and economic stress multipliers
+- **Multi-Factor Risk Scoring**: Mathematical framework with weighted risk factors and economic stress multipliers
 - **NIST CSF 2.0 Compliance**: Automated mapping to official NIST Cybersecurity Framework categories  
 - **Action Plans with References**: Generated remediation plans with direct links to NIST guidelines
 - **Real-time API**: FastAPI implementation with automatic OpenAPI documentation
 - **Scalable Architecture**: Framework expands without breaking existing assessments
-- **Standards Compliance**: Designed for NIST framework requirements
+- **NIST Framework Alignment**: Research implementation of NIST CSF 2.0 concepts
 - **Live Demo**: Immediately accessible online demonstration
 - **Comprehensive Reporting**: JSON and future PDF compliance reports
 
@@ -43,15 +45,26 @@ Where:
 - `R` = Risk score (0-100)
 - `wi` = Weight for risk factor i 
 - `fi` = Binary indicator for factor presence
-- `α` = Economic stress multiplier (VIX + GDP based)
+- `α` = Economic stress multiplier (VIX + GDP growth based via FRED API)
 
-**Current Risk Factors (95 points total):**
-- Data lineage documentation (20 points)
-- Model explainability (15 points) 
-- Drift monitoring (25 points)
-- Third-party dependencies (20 points)
-- Data encryption (10 points)
-- Access controls (5 points)
+**Current Risk Factors:**
+- Data lineage documentation (weight: 20)
+- Model explainability (weight: 15) 
+- Drift monitoring (weight: 25)
+- Third-party dependencies with CVE vulnerability lookup (weight: 20)
+- Data encryption (weight: 10)
+- Access controls (weight: 5)
+
+### Real Data Sources
+
+**Economic Indicators** (via FRED API):
+- VIX (Volatility Index) for market stress assessment
+- Real GDP growth rate for economic health indicators
+
+**Vulnerability Intelligence** (via NIST NVD API):
+- CVE database lookups for third-party libraries
+- CVSS scoring for vulnerability severity assessment
+- Real-time security risk evaluation
 
 ### Supported AI Risk Categories
 

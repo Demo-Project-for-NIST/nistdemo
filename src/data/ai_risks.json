@@ -10,7 +10,7 @@
     "model_drift": {
       "description": "Gradual degradation of model performance over time",
       "supply_chain_impact": "Supplier risk scores become inaccurate leading to fraud",
-      "csf_mappings": ["DE.CM-07", "GV.OC-04", "ID.RA-05"],
+      "csf_mappings": ["DE.CM-07", "ID.RA-05", "GV.SC-07"],
       "severity_factors": ["drift_monitoring_enabled", "model_retraining_frequency"],
       "base_risk_score": 20
     },
@@ -24,21 +24,21 @@
     "model_inversion": {
       "description": "Extracting sensitive training data from deployed models",
       "supply_chain_impact": "Proprietary algorithms stolen via API access",
-      "csf_mappings": ["PR.DS-01", "ID.SC-05", "PR.AC-01"],
+      "csf_mappings": ["PR.DS-01", "GV.SC-04", "PR.AC-01"],
       "severity_factors": ["api_access_controls", "differential_privacy"],
       "base_risk_score": 35
     },
     "supply_chain_ml_attack": {
       "description": "Malicious code in ML pipeline dependencies",
       "supply_chain_impact": "Compromised ML libraries affecting model integrity",
-      "csf_mappings": ["ID.SC-03", "PR.DS-08", "GV.SC-04"],
+      "csf_mappings": ["ID.RA-10", "PR.DS-08", "GV.SC-04"],
       "severity_factors": ["dependency_scanning", "code_signing"],
       "base_risk_score": 40
     },
     "data_lineage_gaps": {
       "description": "Unclear data provenance and transformation history",
       "supply_chain_impact": "Unable to trace data quality issues to source",
-      "csf_mappings": ["ID.AM-03", "GV.SC-01", "PR.DS-09"],
+      "csf_mappings": ["GV.SC-01", "PR.DS-09", "ID.RA-01"],
       "severity_factors": ["data_catalog_maintained", "lineage_tracking"],
       "base_risk_score": 15
     },
@@ -52,7 +52,7 @@
     "ai_system_dependency": {
       "description": "Over-reliance on AI systems without human oversight",
       "supply_chain_impact": "Automated decisions without human verification",
-      "csf_mappings": ["GV.OC-02", "RC.RP-04", "RS.AN-02"],
+      "csf_mappings": ["GV.SC-02", "RC.RP-04", "RS.AN-02"],
       "severity_factors": ["human_in_loop", "fallback_procedures"],
       "base_risk_score": 20
     }

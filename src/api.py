@@ -11,6 +11,10 @@ from sqlalchemy.orm import Session
 import json
 import os
 from typing import Dict
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 from .models import (
     AISystemRequest, 
@@ -137,11 +141,30 @@ POST /assess
 @app.get("/dashboard")
 async def dashboard():
     """Serve the visual dashboard."""
-    dashboard_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "visual_dashboard.html")
-    if os.path.exists(dashboard_path):
-        return FileResponse(dashboard_path, media_type="text/html")
-    else:
-        raise HTTPException(status_code=404, detail="Dashboard not found")
+    # Try multiple possible paths for deployment environments
+    possible_paths = [
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "visual_dashboard.html"),
+        os.path.join("examples", "visual_dashboard.html"),
+        os.path.join(os.getcwd(), "examples", "visual_dashboard.html"),
+        "/opt/render/project/src/examples/visual_dashboard.html",  # Render deployment path
+        "/app/examples/visual_dashboard.html"  # Common container path
+    ]
+    
+    for dashboard_path in possible_paths:
+        if os.path.exists(dashboard_path):
+            return FileResponse(dashboard_path, media_type="text/html")
+    
+    # If no file found, return a simple redirect to docs
+    return HTMLResponse(content="""
+    <html>
+    <head><title>Dashboard Unavailable</title></head>
+    <body>
+        <h1>Dashboard Temporarily Unavailable</h1>
+        <p>Please use the <a href="/docs">API Documentation</a> to test the system.</p>
+        <p><a href="/demo">Back to Demo</a></p>
+    </body>
+    </html>
+    """)
 
 
 @app.post("/assess", response_model=RiskAssessmentResponse)

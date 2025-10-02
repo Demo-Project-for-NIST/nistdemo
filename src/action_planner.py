@@ -38,9 +38,9 @@ class ActionPlanner:
                 "timeline": "60-90 days",
                 "priority": "Critical"
             },
-            "GV.OC-02": {
-                "title": "Implement AI Governance and Transparency",
-                "description": "Establish oversight and transparency for AI decision-making processes",
+            "GV.SC-02": {
+                "title": "Establish Supply Chain Roles and Responsibilities",
+                "description": "Define cybersecurity roles and responsibilities for suppliers, customers, and partners",
                 "actions": [
                     "Create AI governance committee with cross-functional representation",
                     "Develop AI ethics and responsible use guidelines",
@@ -68,9 +68,9 @@ class ActionPlanner:
                 "timeline": "14-30 days",
                 "priority": "High"
             },
-            "ID.AM-03": {
-                "title": "Implement Data Lineage Documentation",
-                "description": "Establish comprehensive data flow and lineage tracking",
+            "ID.RA-01": {
+                "title": "Comprehensive Asset Vulnerability Assessment",
+                "description": "Identify and document vulnerabilities in AI/ML system assets",
                 "actions": [
                     "Map all data sources feeding into AI systems",
                     "Document data transformation and processing steps",
@@ -231,11 +231,9 @@ class ActionPlanner:
             "GV.SC-02": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf#page=25", 
             "GV.SC-03": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf#page=25",
             "GV.SC-04": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf#page=25",
-            "GV.OC-02": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf#page=23",
             
             # AI Risk Management Framework
             "ID.RA-01": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf#page=45",
-            "ID.AM-03": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf#page=30",
             "ID.SC-04": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf#page=32",
             
             # Data Security and Protection
@@ -489,8 +487,8 @@ class ActionPlanner:
         
         # Common dependency patterns
         if category == "DE.CM-07":  # Monitoring depends on data lineage
-            if any(gap.category == "ID.AM-03" for gap in all_gaps):
-                dependencies.append("ID.AM-03: Data lineage documentation must be completed first")
+            if any(gap.category == "ID.RA-01" for gap in all_gaps):
+                dependencies.append("ID.RA-01: Asset vulnerability assessment must be completed first")
         
         if category.startswith("PR."):  # Protection often depends on identification
             id_gaps = [gap.category for gap in all_gaps if gap.category.startswith("ID.")]

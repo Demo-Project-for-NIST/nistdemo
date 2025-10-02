@@ -92,8 +92,8 @@ class CSFMapper:
         # Check for data lineage gaps
         if not system_config.get("data_lineage_documented", False):
             gaps.append(CSFGap(
-                category="ID.AM-03",
-                description="Data flow and lineage not documented",
+                category="ID.RA-01",
+                description="Asset vulnerabilities and data lineage not documented",
                 severity=RiskLevel.MEDIUM
             ))
         
@@ -108,8 +108,8 @@ class CSFMapper:
         # Check for third-party component assessment
         if system_config.get("third_party_libs") and not system_config.get("vendor_assessment", False):
             gaps.append(CSFGap(
-                category="ID.SC-04",
-                description="Third-party ML libraries not assessed for security",
+                category="ID.RA-10",
+                description="Critical suppliers and third-party ML libraries not assessed for security",
                 severity=RiskLevel.MEDIUM
             ))
         

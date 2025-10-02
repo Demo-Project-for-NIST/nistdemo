@@ -7,7 +7,11 @@ import json
 import os
 import requests
 from typing import Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 
 class RiskScorer:
@@ -73,13 +77,18 @@ class RiskScorer:
         
         # Factor 6: Economic stress context (multiplier)
         economic_multiplier = self._get_economic_stress_multiplier()
+        base_score = risk_score
         risk_score = int(risk_score * economic_multiplier)
         
         if economic_multiplier > 1.2:
-            risk_factors.append(f"Elevated economic stress (multiplier: {economic_multiplier})")
+            risk_factors.append(f"Elevated economic stress (multiplier: {economic_multiplier:.1f})")
         
-        # Cap at 100
+        # Cap at 100 and ensure consistent scoring
         risk_score = min(risk_score, 100)
+        
+        # Add validation note for base score calculation
+        if base_score > 95:
+            risk_factors.append("Note: Base risk factors exceed design parameters")
         
         return {
             "overall_risk_score": risk_score,
@@ -90,7 +99,7 @@ class RiskScorer:
     
     def _assess_third_party_risk(self, libraries: List[str]) -> int:
         """
-        Assess risk from third-party libraries and dependencies.
+        Assess risk from third-party libraries using real vulnerability data.
         
         Args:
             libraries: List of third-party library names
@@ -101,30 +110,138 @@ class RiskScorer:
         if not libraries:
             return 0
         
-        # High-risk patterns in library names
-        high_risk_patterns = ["pytorch", "tensorflow", "scikit", "pandas", "numpy"]
-        medium_risk_patterns = ["requests", "flask", "django"]
-        
         risk_score = 0
+        high_risk_libs = 0
         
         for lib in libraries:
-            lib_lower = lib.lower()
+            # Look up real vulnerabilities for this library
+            vuln_score = self._get_library_vulnerability_score(lib)
+            risk_score += vuln_score
             
-            # Check for high-risk ML libraries (more attack surface)
-            if any(pattern in lib_lower for pattern in high_risk_patterns):
-                risk_score += 3
-            elif any(pattern in lib_lower for pattern in medium_risk_patterns):
-                risk_score += 1
-            else:
-                risk_score += 1  # Unknown library
+            if vuln_score >= 5:  # High-risk library
+                high_risk_libs += 1
         
         # Additional risk for large number of dependencies
-        if len(libraries) > 10:
+        if len(libraries) > 15:
             risk_score += 5
+        elif len(libraries) > 10:
+            risk_score += 3
         elif len(libraries) > 5:
-            risk_score += 2
+            risk_score += 1
+            
+        # Bonus penalty for multiple high-risk libraries
+        if high_risk_libs > 3:
+            risk_score += 3
+        elif high_risk_libs > 1:
+            risk_score += 1
         
         return min(risk_score, 20)
+    
+    def _get_library_vulnerability_score(self, library_name: str) -> int:
+        """
+        Get vulnerability score for a library using NVD API.
+        
+        Args:
+            library_name: Name of the library to check
+            
+        Returns:
+            Vulnerability score (0-8)
+        """
+        try:
+            # Use NIST NVD API 2.0 to search for vulnerabilities
+            url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+            params = {
+                'keywordSearch': library_name,
+                'resultsPerPage': 10,
+                'startIndex': 0
+            }
+            
+            response = requests.get(url, params=params, timeout=5)
+            if response.status_code != 200:
+                return self._fallback_library_risk(library_name)
+                
+            data = response.json()
+            vulnerabilities = data.get('vulnerabilities', [])
+            
+            if not vulnerabilities:
+                return self._fallback_library_risk(library_name)
+            
+            # Calculate score based on vulnerability severity
+            critical_count = 0
+            high_count = 0
+            medium_count = 0
+            
+            for vuln in vulnerabilities[:10]:  # Check first 10 CVEs
+                metrics = vuln.get('cve', {}).get('metrics', {})
+                
+                # Try CVSS v3.1 first, then v3.0, then v2.0
+                cvss_score = None
+                for version in ['cvssMetricV31', 'cvssMetricV30', 'cvssMetricV2']:
+                    if version in metrics and metrics[version]:
+                        cvss_data = metrics[version][0]
+                        if version.startswith('cvssMetricV3'):
+                            cvss_score = cvss_data.get('cvssData', {}).get('baseScore')
+                        else:  # v2
+                            cvss_score = cvss_data.get('cvssData', {}).get('baseScore')
+                        break
+                
+                if cvss_score:
+                    if cvss_score >= 9.0:
+                        critical_count += 1
+                    elif cvss_score >= 7.0:
+                        high_count += 1
+                    elif cvss_score >= 4.0:
+                        medium_count += 1
+            
+            # Calculate risk score based on severity distribution
+            # More conservative scoring - not all vulnerabilities are equal
+            if critical_count >= 3:
+                score = 8  # Maximum risk
+            elif critical_count >= 2:
+                score = 7
+            elif critical_count >= 1:
+                score = 6
+            elif high_count >= 3:
+                score = 5
+            elif high_count >= 2:
+                score = 4
+            elif high_count >= 1 or medium_count >= 3:
+                score = 3
+            elif medium_count >= 2:
+                score = 2
+            elif medium_count >= 1:
+                score = 1
+            else:
+                score = 0  # No significant vulnerabilities found
+                
+            return score
+            
+        except Exception:
+            # Fall back to pattern-based assessment
+            return self._fallback_library_risk(library_name)
+    
+    def _fallback_library_risk(self, library_name: str) -> int:
+        """
+        Fallback risk assessment when CVE lookup fails.
+        
+        Args:
+            library_name: Library name
+            
+        Returns:
+            Risk score based on known patterns (0-4)
+        """
+        lib_lower = library_name.lower()
+        
+        # Known high-risk ML/data libraries (larger attack surface)
+        high_risk_patterns = ["tensorflow", "pytorch", "scikit-learn", "numpy", "pandas"]
+        medium_risk_patterns = ["requests", "flask", "django", "pillow", "opencv"]
+        
+        if any(pattern in lib_lower for pattern in high_risk_patterns):
+            return 3  # Higher risk due to complexity and widespread use
+        elif any(pattern in lib_lower for pattern in medium_risk_patterns):
+            return 2  # Medium risk
+        else:
+            return 1  # Unknown library - minimal risk
     
     def _get_economic_stress_multiplier(self) -> float:
         """
@@ -161,29 +278,120 @@ class RiskScorer:
     
     def _fetch_economic_stress_indicator(self) -> float:
         """
-        Fetch economic stress indicator from public sources.
+        Fetch economic stress indicator from FRED API.
         
         Returns:
-            Stress multiplier based on economic conditions
+            Stress multiplier based on real economic conditions
         """
         try:
-            # For MVP, simulate economic stress assessment
-            # In production, this would integrate with FRED API or similar
+            fred_api_key = os.getenv('FRED_API_KEY')
+            if not fred_api_key:
+                return self._fallback_economic_stress()
             
-            # Placeholder logic based on current date
-            # In real implementation, would use actual economic indicators
-            current_month = datetime.utcnow().month
+            # Fetch VIX (volatility index) as primary stress indicator
+            vix_data = self._fetch_fred_series('VIXCLS', fred_api_key)
             
-            # Simulate varying economic conditions
-            if current_month in [1, 2, 12]:  # Winter months - higher stress
-                return 1.3
-            elif current_month in [6, 7, 8]:  # Summer months - lower stress  
-                return 1.1
-            else:
-                return 1.2  # Moderate stress
+            # Fetch GDP growth rate as economic health indicator
+            gdp_data = self._fetch_fred_series('A191RL1Q225SBEA', fred_api_key)  # Real GDP % change
+            
+            # Calculate stress multiplier based on real data
+            stress_multiplier = self._calculate_stress_multiplier(vix_data, gdp_data)
+            
+            return min(stress_multiplier, 2.0)  # Cap at 2.0x multiplier
+            
+        except Exception as e:
+            # Fall back to safe default if API fails
+            return self._fallback_economic_stress()
+    
+    def _fetch_fred_series(self, series_id: str, api_key: str, days_back: int = 30) -> Optional[float]:
+        """
+        Fetch the most recent value from a FRED economic series.
+        
+        Args:
+            series_id: FRED series identifier (e.g., 'VIXCLS', 'A191RL1Q225SBEA')
+            api_key: FRED API key
+            days_back: How many days back to look for data
+            
+        Returns:
+            Most recent value or None if unavailable
+        """
+        try:
+            # Calculate date range
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=days_back)
+            
+            # FRED API endpoint
+            url = f"https://api.stlouisfed.org/fred/series/observations"
+            params = {
+                'series_id': series_id,
+                'api_key': api_key,
+                'file_type': 'json',
+                'start_date': start_date.strftime('%Y-%m-%d'),
+                'end_date': end_date.strftime('%Y-%m-%d'),
+                'sort_order': 'desc',
+                'limit': 1
+            }
+            
+            response = requests.get(url, params=params, timeout=5)
+            response.raise_for_status()
+            
+            data = response.json()
+            observations = data.get('observations', [])
+            
+            if observations and observations[0]['value'] != '.':
+                return float(observations[0]['value'])
                 
+            return None
+            
         except Exception:
-            return 1.0  # Default to normal conditions
+            return None
+    
+    def _calculate_stress_multiplier(self, vix: Optional[float], gdp_growth: Optional[float]) -> float:
+        """
+        Calculate economic stress multiplier from real indicators.
+        
+        Args:
+            vix: VIX volatility index value
+            gdp_growth: Real GDP growth rate (annualized %)
+            
+        Returns:
+            Stress multiplier (1.0 = normal, higher = more stress)
+        """
+        multiplier = 1.0
+        
+        # VIX-based stress (normal VIX ~15-20, crisis >30)
+        if vix is not None:
+            if vix > 40:  # Extreme volatility - financial crisis
+                multiplier += 0.8
+            elif vix > 30:  # High volatility - market stress
+                multiplier += 0.5
+            elif vix > 25:  # Elevated volatility - uncertainty
+                multiplier += 0.3
+            elif vix > 20:  # Moderate volatility - some concern
+                multiplier += 0.1
+                
+        # GDP-based stress (normal growth ~2-3%, recession <0%)
+        # GDP impacts supply chain stability, vendor reliability, and economic capacity
+        if gdp_growth is not None:
+            if gdp_growth < -2:  # Severe recession - supply chain disruption
+                multiplier += 0.7
+            elif gdp_growth < 0:  # Recession - economic contraction
+                multiplier += 0.5
+            elif gdp_growth < 1:  # Slow growth - economic weakness
+                multiplier += 0.3
+            elif gdp_growth < 2:  # Below trend growth - mild concern
+                multiplier += 0.1
+            # No penalty for strong growth (>2%) - stable supply chains
+                
+        return multiplier
+    
+    def _fallback_economic_stress(self) -> float:
+        """
+        Fallback economic stress calculation when API unavailable.
+        Uses conservative baseline rather than seasonal simulation.
+        """
+        # Conservative baseline - moderate stress assumption
+        return 1.2
     
     def get_risk_breakdown(self, system_config: Dict) -> Dict:
         """

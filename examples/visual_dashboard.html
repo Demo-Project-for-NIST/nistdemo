@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIST AI Risk Management Toolkit - Visual Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f4788;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #1f4788;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: #2c5aa0;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background: #f9f9f9;
+            border-left: 4px solid #1f4788;
+        }
+        .risk-critical { color: #d32f2f; font-weight: bold; }
+        .risk-high { color: #f57c00; font-weight: bold; }
+        .risk-medium { color: #fbc02d; font-weight: bold; }
+        .risk-low { color: #388e3c; font-weight: bold; }
+        .gap-item {
+            background: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #f57c00;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NIST AI Risk Management Toolkit</h1>
+        <p style="text-align: center; color: #666;">
+            Interactive dashboard for AI system risk assessment aligned with NIST CSF 2.0
+        </p>
+
+        <div class="status" id="status">
+            API Status: <span id="api-status">Checking...</span>
+        </div>
+
+        <div class="section">
+            <h2>AI System Risk Assessment</h2>
+            <form id="assessment-form">
+                <div class="form-group">
+                    <label for="system-name">System Name:</label>
+                    <input type="text" id="system-name" value="Credit Risk Assessment Model" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="model-type">Model Type:</label>
+                    <select id="model-type">
+                        <option value="Random Forest">Random Forest</option>
+                        <option value="Neural Network">Neural Network</option>
+                        <option value="Linear Regression">Linear Regression</option>
+                        <option value="Gradient Boosting">Gradient Boosting</option>
+                        <option value="Deep Neural Network">Deep Neural Network</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="deployment-env">Deployment Environment:</label>
+                    <select id="deployment-env">
+                        <option value="aws_sagemaker">AWS SageMaker</option>
+                        <option value="azure_ml">Azure ML</option>
+                        <option value="google_cloud">Google Cloud</option>
+                        <option value="on_premise">On-Premise</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="data-sources">Data Sources (comma-separated):</label>
+                    <input type="text" id="data-sources" value="internal_db, credit_bureau, market_data">
+                </div>
+                
+                <div class="form-group">
+                    <label for="third-party-libs">Third-Party Libraries (comma-separated):</label>
+                    <input type="text" id="third-party-libs" value="scikit-learn, pandas, numpy">
+                </div>
+                
+                <button type="submit">Assess Risk</button>
+                <button type="button" onclick="loadExample()">Load Example</button>
+            </form>
+            
+            <div id="assessment-result" class="result" style="display: none;">
+                <h3>Assessment Results</h3>
+                <div id="assessment-content"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>CSF Risk Mapping Explorer</h2>
+            <div class="form-group">
+                <label for="risk-type">AI Risk Type:</label>
+                <select id="risk-type">
+                    <option value="training_data_poisoning">Training Data Poisoning</option>
+                    <option value="model_drift">Model Drift</option>
+                    <option value="adversarial_examples">Adversarial Examples</option>
+                    <option value="model_inversion">Model Inversion</option>
+                    <option value="supply_chain_ml_attack">Supply Chain ML Attack</option>
+                    <option value="data_lineage_gaps">Data Lineage Gaps</option>
+                    <option value="model_backdoors">Model Backdoors</option>
+                    <option value="ai_system_dependency">AI System Dependency</option>
+                </select>
+            </div>
+            <button onclick="exploreMapping()">Explore CSF Mapping</button>
+            
+            <div id="mapping-result" class="result" style="display: none;">
+                <h3>CSF Mapping Results</h3>
+                <div id="mapping-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8001' 
+            : 'https://nist-ai-risk-toolkit.onrender.com';
+
+        // Check API status on load
+        async function checkApiStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                document.getElementById('api-status').textContent = 
+                    `✓ Connected (${data.status})`;
+                document.getElementById('api-status').style.color = '#388e3c';
+            } catch (error) {
+                document.getElementById('api-status').textContent = 
+                    '✗ Disconnected - Make sure API server is running';
+                document.getElementById('api-status').style.color = '#d32f2f';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('assessment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                system_name: document.getElementById('system-name').value,
+                model_type: document.getElementById('model-type').value,
+                deployment_env: document.getElementById('deployment-env').value,
+                data_sources: document.getElementById('data-sources').value.split(',').map(s => s.trim()),
+                third_party_libs: document.getElementById('third-party-libs').value.split(',').map(s => s.trim())
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/assess`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                displayAssessmentResult(result);
+            } catch (error) {
+                document.getElementById('assessment-content').innerHTML = 
+                    `<p style="color: red;">Error: ${error.message}</p>`;
+                document.getElementById('assessment-result').style.display = 'block';
+            }
+        });
+
+        function displayAssessmentResult(result) {
+            const riskClass = getRiskClass(result.risk_level);
+            
+            let html = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h4>System: ${result.system_name}</h4>
+                    <div style="text-align: right;">
+                        <div style="font-size: 24px; font-weight: bold;" class="${riskClass}">
+                            ${result.overall_risk_score}/100
+                        </div>
+                        <div class="${riskClass}">${result.risk_level} Risk</div>
+                    </div>
+                </div>
+                
+                <h4>NIST CSF Compliance Gaps (${result.csf_compliance_gaps.length} found):</h4>
+            `;
+
+            if (result.csf_compliance_gaps.length > 0) {
+                result.csf_compliance_gaps.forEach(gap => {
+                    html += `
+                        <div class="gap-item">
+                            <strong>${gap.category}</strong> - <span class="${getRiskClass(gap.severity)}">${gap.severity}</span>
+                            <br>${gap.description}
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p>No compliance gaps identified.</p>';
+            }
+
+            html += '<h4>Recommended Actions:</h4><ul>';
+            result.recommended_actions.forEach(action => {
+                html += `<li>${action}</li>`;
+            });
+            html += '</ul>';
+
+            // Add detailed action plan section
+            if (result.action_plan && result.action_plan.length > 0) {
+                html += `<h4>Detailed Action Plan (${result.action_plan.length} actions):</h4>`;
+                result.action_plan.forEach((action, index) => {
+                    const priorityClass = action.priority === 'High' ? 'high-risk' : 'medium-risk';
+                    html += `
+                        <div class="action-item" style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin: 10px 0; background: #f9f9f9;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h5 style="margin: 0; color: #1f4788;">Action ${index + 1}: ${action.action}</h5>
+                                <span class="${priorityClass}" style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                                    ${action.priority} Priority
+                                </span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 14px;">
+                                <div>
+                                    <strong>Timeline:</strong> ${action.timeline}<br>
+                                    <strong>Cost Estimate:</strong> ${action.cost_estimate}
+                                </div>
+                                <div>
+                                    <strong>CSF Category:</strong> ${action.category}<br>
+                                    <strong>Success Criteria:</strong> ${action.success_criteria.substring(0, 100)}${action.success_criteria.length > 100 ? '...' : ''}
+                                </div>
+                            </div>
+                            ${action.nist_reference ? `
+                                <div style="margin-top: 10px; padding: 8px; background: #f0f8ff; border-radius: 4px; font-size: 12px;">
+                                    <strong>NIST Reference:</strong> 
+                                    <a href="${action.nist_reference}" target="_blank" style="color: #1f4788; text-decoration: none;">
+                                        Official Guidelines →
+                                    </a>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('assessment-content').innerHTML = html;
+            document.getElementById('assessment-result').style.display = 'block';
+        }
+
+        async function exploreMapping() {
+            const riskType = document.getElementById('risk-type').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/csf-mapping/${riskType}`);
+                const result = await response.json();
+                
+                let html = `
+                    <h4>Risk: ${result.risk_type.replace(/_/g, ' ').toUpperCase()}</h4>
+                    <p><strong>Description:</strong> ${result.description}</p>
+                    <h4>Mapped NIST CSF Categories:</h4>
+                `;
+
+                result.mapped_categories.forEach(category => {
+                    html += `
+                        <div class="gap-item">
+                            <div style="margin-bottom: 5px;">
+                                <strong>${category.code}</strong> - <span class="${getRiskClass(category.severity)}">${category.severity}</span>
+                            </div>
+                            <div style="font-size: 14px; color: #666; margin-left: 20px;">
+                                ${category.description}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('mapping-content').innerHTML = html;
+                document.getElementById('mapping-result').style.display = 'block';
+            } catch (error) {
+                document.getElementById('mapping-content').innerHTML = 
+                    `<p style="color: red;">Error: ${error.message}</p>`;
+                document.getElementById('mapping-result').style.display = 'block';
+            }
+        }
+
+        function getRiskClass(riskLevel) {
+            switch(riskLevel.toLowerCase()) {
+                case 'critical': return 'risk-critical';
+                case 'high': return 'risk-high';
+                case 'medium': return 'risk-medium';
+                case 'low': return 'risk-low';
+                default: return '';
+            }
+        }
+
+        function loadExample() {
+            document.getElementById('system-name').value = 'Supply Chain Fraud Detection';
+            document.getElementById('model-type').value = 'Deep Neural Network';
+            document.getElementById('deployment-env').value = 'aws_sagemaker';
+            document.getElementById('data-sources').value = 'transaction_logs, vendor_data, external_threat_intel';
+            document.getElementById('third-party-libs').value = 'tensorflow, pandas, numpy, boto3';
+        }
+
+        // Check API status on page load
+        checkApiStatus();
+    </script>
+</body>
+</html>

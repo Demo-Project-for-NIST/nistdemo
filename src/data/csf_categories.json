@@ -1,0 +1,117 @@
+{
+  "functions": {
+    "GOVERN": {
+      "description": "Establish cybersecurity governance and risk management strategy",
+      "categories": {
+        "GV.SC": {
+          "name": "Cybersecurity Supply Chain Risk Management",
+          "subcategories": {
+            "GV.SC-01": "A cybersecurity supply chain risk management program, strategy, objectives, policies, and processes are established and agreed to by organizational stakeholders",
+            "GV.SC-02": "Cybersecurity roles and responsibilities for suppliers, customers, and partners are established, communicated, and coordinated internally and externally",
+            "GV.SC-03": "Cybersecurity supply chain risk management is integrated into cybersecurity and enterprise risk management, risk assessment, and improvement processes",
+            "GV.SC-04": "Suppliers are known and prioritized by criticality",
+            "GV.SC-05": "Requirements to address cybersecurity risks in supply chains are established, prioritized, and integrated into contracts and other types of agreements with suppliers and other relevant third parties",
+            "GV.SC-06": "Planning and due diligence are performed to reduce risks before entering into formal supplier or other third-party relationships",
+            "GV.SC-07": "The risks posed by a supplier, their products, or their services are understood, recorded, prioritized, assessed, responded to, and monitored over the course of the relationship",
+            "GV.SC-08": "Relevant suppliers and other third parties are included in incident planning, response, and recovery activities",
+            "GV.SC-09": "Supply chain security practices are integrated into cybersecurity and enterprise risk management programs, and their performance is monitored throughout the technology product and service life cycle",
+            "GV.SC-10": "Cybersecurity supply chain risk management plans include provisions for activities that occur during and after incidents"
+          }
+        }
+      }
+    },
+    "IDENTIFY": {
+      "description": "Understand assets, risks, and vulnerabilities",
+      "categories": {
+        "ID.RA": {
+          "name": "Risk Assessment",
+          "subcategories": {
+            "ID.RA-01": "Asset vulnerabilities are identified and documented",
+            "ID.RA-02": "Cyber threat intelligence is received from information sharing forums and sources",
+            "ID.RA-03": "Threats, both internal and external, are identified and documented",
+            "ID.RA-04": "Potential business impacts and likelihoods are identified",
+            "ID.RA-05": "Threats, vulnerabilities, likelihoods, and impacts are used to understand inherent risk and inform risk response prioritization",
+            "ID.RA-06": "Risk responses are identified and prioritized",
+            "ID.RA-07": "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked",
+            "ID.RA-08": "Processes for receiving, analyzing, and responding to vulnerability disclosures are established",
+            "ID.RA-09": "The authenticity and integrity of hardware and software are assessed prior to acquisition and use",
+            "ID.RA-10": "Critical suppliers are assessed prior to acquisition and during use"
+          }
+        }
+      }
+    },
+    "PROTECT": {
+      "description": "Implement safeguards to ensure delivery of critical infrastructure services",
+      "categories": {
+        "PR.DS": {
+          "name": "Data Security",
+          "subcategories": {
+            "PR.DS-01": "Data-at-rest is protected",
+            "PR.DS-02": "Data-in-transit is protected",
+            "PR.DS-03": "Systems/assets are formally managed throughout removal, transfers, and disposition",
+            "PR.DS-04": "Adequate capacity to ensure availability is maintained",
+            "PR.DS-05": "Protections against data leaks are implemented",
+            "PR.DS-06": "Integrity checking mechanisms are used to verify software, firmware, and information integrity",
+            "PR.DS-07": "The development and testing environment(s) are separate from the production environment",
+            "PR.DS-08": "Integrity checking mechanisms are used to verify hardware integrity",
+            "PR.DS-09": "Managing the security of data throughout its lifecycle including during aggregation, processing, and sharing",
+            "PR.DS-10": "Data security roles and responsibilities are established",
+            "PR.DS-11": "Data is destroyed according to policy"
+          }
+        }
+      }
+    },
+    "DETECT": {
+      "description": "Identify cybersecurity events",
+      "categories": {
+        "DE.CM": {
+          "name": "Continuous Monitoring",
+          "subcategories": {
+            "DE.CM-01": "Networks and network services are monitored to detect potential cybersecurity events",
+            "DE.CM-02": "The physical environment is monitored to detect potential cybersecurity events",
+            "DE.CM-03": "Personnel activity and technology usage are monitored to detect potential cybersecurity events",
+            "DE.CM-04": "Malicious code is detected",
+            "DE.CM-05": "Unauthorized mobile code is detected",
+            "DE.CM-06": "External service provider activities are monitored to detect potential cybersecurity events",
+            "DE.CM-07": "Monitoring for unauthorized personnel, connections, devices, and software is performed",
+            "DE.CM-08": "Vulnerability scans are performed",
+            "DE.CM-09": "Computing hardware and software, runtime environments, and their configurations are monitored to detect potential cybersecurity events"
+          }
+        }
+      }
+    },
+    "RESPOND": {
+      "description": "Take action regarding a detected cybersecurity incident",
+      "categories": {
+        "RS.AN": {
+          "name": "Analysis",
+          "subcategories": {
+            "RS.AN-01": "Notifications from detection systems are investigated",
+            "RS.AN-02": "The impact of the incident is understood",
+            "RS.AN-03": "Forensics are performed",
+            "RS.AN-04": "Incidents are categorized consistent with response plans",
+            "RS.AN-05": "Processes are established to receive, analyze and respond to vulnerabilities disclosed to the organization from internal and external sources",
+            "RS.AN-06": "Actions performed during an investigation are recorded",
+            "RS.AN-07": "Incident data and metadata are collected and preserved"
+          }
+        }
+      }
+    },
+    "RECOVER": {
+      "description": "Restore capabilities or services that were impaired due to a cybersecurity incident",
+      "categories": {
+        "RC.RP": {
+          "name": "Recovery Planning",
+          "subcategories": {
+            "RC.RP-01": "The recovery portion of the incident response plan is executed once initiated from the incident response process",
+            "RC.RP-02": "Recovery actions are selected, scoped, prioritized, and performed",
+            "RC.RP-03": "The integrity of backups and other restoration assets is verified before using them for restoration",
+            "RC.RP-04": "Critical mission functions and cybersecurity risk management are considered to establish post-incident operational norms",
+            "RC.RP-05": "The integrity of restored assets is verified, systems and services are restored, and normal operating status is confirmed",
+            "RC.RP-06": "The end of incident recovery is declared based on criteria established by the organization"
+          }
+        }
+      }
+    }
+  }
+}

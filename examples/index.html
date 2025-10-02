@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIST AI Risk Management Toolkit - Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 15px;
+            color: #333;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f4788;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .demo-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .demo-card:hover {
+            border-color: #1f4788;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(31,71,136,0.1);
+        }
+        .demo-button {
+            display: inline-block;
+            background: #1f4788;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px;
+            transition: background 0.3s ease;
+        }
+        .demo-button:hover {
+            background: #2c5aa0;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online { background: #28a745; }
+        .status-checking { background: #ffc107; }
+        .features {
+            background: #e8f4fd;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .contact {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NIST AI Risk Management Toolkit</h1>
+        <p class="subtitle">
+            Open-source prototype implementing NIST Cybersecurity Framework 2.0<br>
+            Aligned with Executive Order 14028 requirements
+        </p>
+
+        <div class="demo-grid">
+            <div class="demo-card">
+                <h3>🎯 Interactive Dashboard</h3>
+                <p>Visual interface for AI risk assessment with real-time CSF mapping and action plan generation.</p>
+                <a href="visual_dashboard.html" class="demo-button">Launch Dashboard</a>
+                <div style="margin-top: 15px;">
+                    <span class="status-indicator status-checking" id="dashboard-status"></span>
+                    <span id="dashboard-text">Checking status...</span>
+                </div>
+            </div>
+
+            <div class="demo-card">
+                <h3>🔗 API Documentation</h3>
+                <p>Comprehensive REST API with automatic OpenAPI documentation and interactive testing.</p>
+                <a href="https://nist-ai-risk-toolkit.onrender.com/docs" class="demo-button" target="_blank">View API Docs</a>
+                <div style="margin-top: 15px;">
+                    <span class="status-indicator status-checking" id="api-status"></span>
+                    <span id="api-text">Checking status...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <h3>🔧 Key Features</h3>
+            <div class="feature-list">
+                <div>✅ Six-factor risk scoring (95-point scale)</div>
+                <div>✅ Dynamic economic stress multipliers</div>
+                <div>✅ Automated CSF 2.0 category mapping</div>
+                <div>✅ Action plans with NIST references</div>
+                <div>✅ Real-time API assessment</div>
+                <div>✅ Scalable mathematical framework</div>
+                <div>✅ Federal compliance reporting</div>
+                <div>✅ Open-source implementation</div>
+            </div>
+        </div>
+
+        <div style="background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid #ffc107; margin: 30px 0;">
+            <h4 style="margin-top: 0; color: #856404;">⚠️ Prototype Status</h4>
+            <p style="margin-bottom: 0; color: #856404;">
+                This is a research prototype requiring empirical validation before production deployment. 
+                The system demonstrates mathematical framework implementation and NIST CSF alignment.
+            </p>
+        </div>
+
+        <div class="contact">
+            <h3>📧 Contact Information</h3>
+            <p><strong>For NIST evaluation and feedback:</strong></p>
+            <p>Technical inquiries: [Your email]<br>
+            Repository: <a href="https://github.com/your-repo/nist-ai-risk-toolkit" target="_blank">GitHub</a><br>
+            Documentation: Technical reports available in /docs folder</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://nist-ai-risk-toolkit.onrender.com';
+        
+        async function checkSystemStatus() {
+            // Check API status
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                if (response.ok) {
+                    document.getElementById('api-status').className = 'status-indicator status-online';
+                    document.getElementById('api-text').textContent = 'API Online';
+                    
+                    document.getElementById('dashboard-status').className = 'status-indicator status-online';
+                    document.getElementById('dashboard-text').textContent = 'Dashboard Ready';
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                document.getElementById('api-status').className = 'status-indicator status-offline';
+                document.getElementById('api-text').textContent = 'API Offline';
+                
+                document.getElementById('dashboard-status').className = 'status-indicator status-offline';
+                document.getElementById('dashboard-text').textContent = 'Dashboard Unavailable';
+            }
+        }
+        
+        // Check status on load
+        checkSystemStatus();
+        
+        // Recheck every 30 seconds
+        setInterval(checkSystemStatus, 30000);
+    </script>
+</body>
+</html>

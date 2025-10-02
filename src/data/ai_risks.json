@@ -1,0 +1,66 @@
+{
+  "ai_risk_categories": {
+    "training_data_poisoning": {
+      "description": "Adversarial manipulation of ML training data to corrupt model behavior",
+      "supply_chain_impact": "Corrupted demand forecasting leading to inventory failures",
+      "csf_mappings": ["ID.RA-01", "PR.DS-06", "GV.SC-03"],
+      "severity_factors": ["data_lineage_documented", "data_validation_enabled"],
+      "base_risk_score": 25
+    },
+    "model_drift": {
+      "description": "Gradual degradation of model performance over time",
+      "supply_chain_impact": "Supplier risk scores become inaccurate leading to fraud",
+      "csf_mappings": ["DE.CM-07", "GV.OC-04", "ID.RA-05"],
+      "severity_factors": ["drift_monitoring_enabled", "model_retraining_frequency"],
+      "base_risk_score": 20
+    },
+    "adversarial_examples": {
+      "description": "Crafted inputs designed to fool ML models",
+      "supply_chain_impact": "Invoice fraud bypasses ML validation systems",
+      "csf_mappings": ["PR.AC-07", "DE.AE-02", "RS.AN-01"],
+      "severity_factors": ["input_validation", "anomaly_detection"],
+      "base_risk_score": 30
+    },
+    "model_inversion": {
+      "description": "Extracting sensitive training data from deployed models",
+      "supply_chain_impact": "Proprietary algorithms stolen via API access",
+      "csf_mappings": ["PR.DS-01", "ID.SC-05", "PR.AC-01"],
+      "severity_factors": ["api_access_controls", "differential_privacy"],
+      "base_risk_score": 35
+    },
+    "supply_chain_ml_attack": {
+      "description": "Malicious code in ML pipeline dependencies",
+      "supply_chain_impact": "Compromised ML libraries affecting model integrity",
+      "csf_mappings": ["ID.SC-03", "PR.DS-08", "GV.SC-04"],
+      "severity_factors": ["dependency_scanning", "code_signing"],
+      "base_risk_score": 40
+    },
+    "data_lineage_gaps": {
+      "description": "Unclear data provenance and transformation history",
+      "supply_chain_impact": "Unable to trace data quality issues to source",
+      "csf_mappings": ["ID.AM-03", "GV.SC-01", "PR.DS-09"],
+      "severity_factors": ["data_catalog_maintained", "lineage_tracking"],
+      "base_risk_score": 15
+    },
+    "model_backdoors": {
+      "description": "Hidden functionality in ML models triggered by specific inputs",
+      "supply_chain_impact": "Compromised vendor models in supply chain decisions",
+      "csf_mappings": ["ID.RA-09", "PR.DS-06", "DE.CM-04"],
+      "severity_factors": ["model_validation", "third_party_model_assessment"],
+      "base_risk_score": 45
+    },
+    "ai_system_dependency": {
+      "description": "Over-reliance on AI systems without human oversight",
+      "supply_chain_impact": "Automated decisions without human verification",
+      "csf_mappings": ["GV.OC-02", "RC.RP-04", "RS.AN-02"],
+      "severity_factors": ["human_in_loop", "fallback_procedures"],
+      "base_risk_score": 20
+    }
+  },
+  "economic_stress_multipliers": {
+    "low_stress": 1.0,
+    "moderate_stress": 1.2,
+    "high_stress": 1.5,
+    "crisis_stress": 2.0
+  }
+}

@@ -119,7 +119,7 @@
             <div class="demo-card">
                 <h3>🔗 API Documentation</h3>
                 <p>Comprehensive REST API with automatic OpenAPI documentation and interactive testing.</p>
-                <a href="https://nist-ai-risk-toolkit.onrender.com/docs" class="demo-button" target="_blank">View API Docs</a>
+                <a href="/docs" class="demo-button" target="_blank">View API Docs</a>
                 <div style="margin-top: 15px;">
                     <span class="status-indicator status-checking" id="api-status"></span>
                     <span id="api-text">Checking status...</span>
@@ -159,7 +159,9 @@
     </div>
 
     <script>
-        const API_BASE = 'https://nist-ai-risk-toolkit.onrender.com';
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8001' 
+            : `${window.location.protocol}//${window.location.host}`;
         
         async function checkSystemStatus() {
             // Check API status

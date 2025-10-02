@@ -63,14 +63,25 @@ async def root():
     return {
         "message": "NIST AI Risk Management Toolkit",
         "version": "0.1.0",
-        "documentation": "/docs",
+        "demo": "/demo",
         "dashboard": "/dashboard",
+        "documentation": "/docs",
         "endpoints": {
             "assess": "POST /assess - AI system risk assessment",
             "csf-mapping": "GET /csf-mapping/{risk_type} - CSF category mapping",
             "report": "POST /report - Generate compliance report"
         }
     }
+
+
+@app.get("/demo")
+async def demo_landing():
+    """Serve the demo landing page."""
+    landing_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "index.html")
+    if os.path.exists(landing_path):
+        return FileResponse(landing_path, media_type="text/html")
+    else:
+        raise HTTPException(status_code=404, detail="Demo landing page not found")
 
 
 @app.get("/dashboard")
